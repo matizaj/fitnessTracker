@@ -1,0 +1,15 @@
+<section>
+  <form [formGroup]="form" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px" (ngSubmit)="onSubmit()">
+    <mat-form-field>
+      <input type="email" matInput placeholder="Your Email" required formControlName="email"  placeholder="Your Email">
+      <mat-hint>Please enter a valid email</mat-hint>
+      <mat-error *ngIf="!(form.get('email').valid && form.get('email').touched)">Invalid or missing email</mat-error>
+    </mat-form-field>
+    <mat-form-field hintLabel="Should be at least 6 char long">
+      <input type="password" matInput placeholder="Your Password" required  formControlName="password"  placeholder="Your Password">
+      <mat-hint>Please enter your password</mat-hint>
+      <mat-error *ngIf="!(form.get('password').valid && form.get('password').touched)">Missing password</mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" [disabled]="!form.valid" type="submit">Login</button>
+  </form>
+</section>

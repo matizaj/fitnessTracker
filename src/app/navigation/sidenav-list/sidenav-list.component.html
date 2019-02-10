@@ -1,0 +1,8 @@
+<mat-nav-list>
+    <a mat-list-item [routerLink]="['/signup']" (click)="onSidenavToggle()" *ngIf="!isAuth"><mat-icon>face</mat-icon><span class="nav-caption"></span>Sign Up!</a>
+    <a mat-list-item [routerLink]="['/login']" (click)="onSidenavToggle()" *ngIf="!isAuth"><mat-icon>input</mat-icon><span class="nav-caption"></span>Login</a>
+    <a mat-list-item [routerLink]="['/training']" (click)="onSidenavToggle()" *ngIf="isAuth"><mat-icon>fitness_center</mat-icon><span class="nav-caption"></span>Training</a>
+    <mat-list-item>
+        <button mat-icon-button (click)="onLogout()" *ngIf="isAuth"><mat-icon>eject</mat-icon><span class="nav-caption"></span>Logout</button>
+    </mat-list-item>
+</mat-nav-list>
