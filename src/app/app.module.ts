@@ -6,8 +6,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { SignupComponent } from './auth/signup/signup.component';
-import { LoginComponent } from './auth/login/login.component';
 import { TrainingComponent } from './training/training.component';
 import { CurrentTrainingComponent } from './training/current-training/current-training.component';
 import { NextTrainingComponent } from './training/next-training/next-training.component';
@@ -28,8 +26,6 @@ import { UIService } from './shared/ui.service';
 @NgModule({
   declarations: [
     AppComponent,
-    SignupComponent,
-    LoginComponent,
     TrainingComponent,
     CurrentTrainingComponent,
     NextTrainingComponent,
