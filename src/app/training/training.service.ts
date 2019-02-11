@@ -4,12 +4,16 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
+import { UIService } from '../shared/ui.service';
 
 @Injectable()
 export class TrainingService {
-constructor(private db: AngularFirestore) {}
+
+constructor(private db: AngularFirestore, private ui: UIService) {}
+
 exerciseChanged = new Subject<Exercise>();
 exercisesChanged = new Subject<Exercise[]>();
+
 finishedExercisesChanged = new Subject<Exercise[]>();
 
   availableExercise: Exercise[] = [];
@@ -20,6 +24,7 @@ finishedExercisesChanged = new Subject<Exercise[]>();
   private finishedExercises: Exercise[] = [];
 
   fetchAvailableExercice() {
+    this.ui.loadingContentChanged.next(true);
     this.fbSubs.push(this.db.collection('availableExercise').snapshotChanges().pipe(map(docArray => {
       return  docArray.map(el => {
         return {
@@ -28,9 +33,14 @@ finishedExercisesChanged = new Subject<Exercise[]>();
         } as Exercise;
       });
     })).subscribe((exercise: Exercise[]) => {
+      this.ui.loadingContentChanged.next(false);
       this.availableExercise = exercise;
       this.exercisesChanged.next([...this.availableExercise]);
-    }, err => console.log(' Err message ' + err)
+    }, err => {
+      this.ui.loadingContentChanged.next(false);
+      this.ui.showSnackBar(err.message, null, 3000);
+      this.exercisesChanged.next(null);
+    }
     ));
   }
 
