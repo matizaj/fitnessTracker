@@ -10,7 +10,7 @@
       <mat-hint>Please enter your password</mat-hint>
       <mat-error *ngIf="!(form.get('password').valid && form.get('password').touched)">Missing password</mat-error>
     </mat-form-field>
-    <button *ngIf="!isLoading" mat-raised-button color="primary" [disabled]="!form.valid" type="submit">Login</button>
-    <mat-spinner *ngIf="isLoading"></mat-spinner>
+    <button *ngIf="!(isLoading$ | async)" mat-raised-button color="primary" [disabled]="!form.valid" type="submit">Login</button>
+    <mat-spinner *ngIf="(isLoading$ | async)"></mat-spinner>
   </form>
 </section>

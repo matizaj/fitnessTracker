@@ -6,6 +6,9 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { TrainingService } from '../training/training.service';
 import { UIService } from '../shared/ui.service';
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../app.reducer';
+import * as UI from '../shared/ui.actions';
 
 @Injectable()
 export class AuthService {
@@ -13,7 +16,7 @@ export class AuthService {
   authChange = new Subject<boolean>();
 
   constructor(private router: Router, private authfire: AngularFireAuth, private trainingService: TrainingService,
-   private ui: UIService) {
+   private ui: UIService, private store: Store<fromRoot.State>) {
 
   }
   initAuthListener() {
@@ -32,26 +35,32 @@ export class AuthService {
   }
 
   registerUser(authData: AuthData) {
+    this.store.dispatch(new UI.StartLoading());
    this.authfire.auth.createUserWithEmailAndPassword(authData.email, authData.password).then(result => {
      console.log(result);
-     this.ui.loadingContentChanged.next(true);
+     // this.ui.loadingContentChanged.next(true);
+     this.store.dispatch(new UI.StopLoading());
     })
     .catch(err => {
       this.ui.showSnackBar(err.message, null, 3000);
-      this.ui.loadingContentChanged.next(false);
+      // this.ui.loadingContentChanged.next(false);
+      this.store.dispatch(new UI.StopLoading());
     });
 
   }
 
   login(authData: AuthData) {
-    this.ui.loadingContentChanged.next(true);
+    // this.ui.loadingContentChanged.next(true);
+    this.store.dispatch(new UI.StartLoading());
     this.authfire.auth.signInWithEmailAndPassword(authData.email, authData.password).then(result => {
       console.log(result);
-      this.ui.loadingContentChanged.next(false);
+      // this.ui.loadingContentChanged.next(false);
+      this.store.dispatch(new UI.StopLoading());
      })
      .catch(err => {
       this.ui.showSnackBar(err.message, null, 3000);
-      this.ui.loadingContentChanged.next(false);
+      // this.ui.loadingContentChanged.next(false);
+      this.store.dispatch(new UI.StopLoading());
      });
   }
 
