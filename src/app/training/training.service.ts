@@ -5,11 +5,14 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { map } from 'rxjs/operators';
 import { Subscription } from 'rxjs';
 import { UIService } from '../shared/ui.service';
+import * as UI from '../shared/ui.actions';
+import * as fromRoot from '../app.reducer';
+import { Store } from '@ngrx/store';
 
 @Injectable()
 export class TrainingService {
 
-constructor(private db: AngularFirestore, private ui: UIService) {}
+constructor(private db: AngularFirestore, private ui: UIService, private store: Store<fromRoot.State>) {}
 
 exerciseChanged = new Subject<Exercise>();
 exercisesChanged = new Subject<Exercise[]>();
@@ -24,7 +27,8 @@ finishedExercisesChanged = new Subject<Exercise[]>();
   private finishedExercises: Exercise[] = [];
 
   fetchAvailableExercice() {
-    this.ui.loadingContentChanged.next(true);
+    // this.ui.loadingContentChanged.next(true);
+    this.store.dispatch(new UI.StartLoading());
     this.fbSubs.push(this.db.collection('availableExercise').snapshotChanges().pipe(map(docArray => {
       return  docArray.map(el => {
         return {
@@ -33,11 +37,13 @@ finishedExercisesChanged = new Subject<Exercise[]>();
         } as Exercise;
       });
     })).subscribe((exercise: Exercise[]) => {
-      this.ui.loadingContentChanged.next(false);
+      // this.ui.loadingContentChanged.next(false);
+      this.store.dispatch(new UI.StopLoading());
       this.availableExercise = exercise;
       this.exercisesChanged.next([...this.availableExercise]);
     }, err => {
-      this.ui.loadingContentChanged.next(false);
+      // this.ui.loadingContentChanged.next(false);
+      this.store.dispatch(new UI.StopLoading());
       this.ui.showSnackBar(err.message, null, 3000);
       this.exercisesChanged.next(null);
     }
