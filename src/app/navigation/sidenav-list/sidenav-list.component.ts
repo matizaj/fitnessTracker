@@ -1,6 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { AuthService } from 'src/app/auth/auth.service';
-import { Subscription } from 'rxjs';
+import { Subscription, Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+import * as fromRoot from '../../app.reducer';
 
 @Component({
   selector: 'app-sidenav-list',
@@ -10,14 +12,16 @@ import { Subscription } from 'rxjs';
 export class SidenavListComponent implements OnInit, OnDestroy {
 
   @Output() sidenavToggle = new EventEmitter<void>();
-  isAuth = false;
+  // isAuth = false;
+  isAuth$: Observable<boolean>;
   authSubscription: Subscription;
-  constructor(private auth: AuthService) { }
+  constructor(private auth: AuthService, private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
-    this.authSubscription = this.auth.authChange.subscribe(data => {
-      this.isAuth = data;
-    });
+    // this.authSubscription = this.auth.authChange.subscribe(data => {
+    //   this.isAuth = data;
+    // });
+    this.isAuth$ = this.store.select(fromRoot.getIsAuth);
   }
 
   onSidenavToggle() {

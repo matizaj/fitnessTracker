@@ -9,6 +9,7 @@ import { UIService } from '../shared/ui.service';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../app.reducer';
 import * as UI from '../shared/ui.actions';
+import * as Auth from './auth.actions';
 
 @Injectable()
 export class AuthService {
@@ -22,20 +23,22 @@ export class AuthService {
   initAuthListener() {
     this.authfire.authState.subscribe(user => {
       if (user) {
-        this.isAuthenticated = true;
-        this.authChange.next(true);
+        // this.isAuthenticated = true;
+        // this.authChange.next(true);
+        this.store.dispatch(new Auth.SetAuthenticated());
         this.router.navigate(['/training']);
       } else {
         this.trainingService.cancelSubscriptions();
-        this.isAuthenticated = false;
-        this.authChange.next(false);
+        // this.isAuthenticated = false;
+        // this.authChange.next(false);
+        this.store.dispatch(new Auth.SetUnAuthenticated());
         this.router.navigate(['/login']);
       }
     });
   }
 
   registerUser(authData: AuthData) {
-    this.store.dispatch(new UI.StartLoading());
+  this.store.dispatch(new UI.StartLoading());
    this.authfire.auth.createUserWithEmailAndPassword(authData.email, authData.password).then(result => {
      console.log(result);
      // this.ui.loadingContentChanged.next(true);
@@ -69,8 +72,8 @@ export class AuthService {
 
   }
 
-  isAuth() {
-    return this.isAuthenticated;
-  }
+  // isAuth() {
+  //   return this.isAuthenticated;
+  // }
 
   }
