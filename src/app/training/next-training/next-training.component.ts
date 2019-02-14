@@ -25,8 +25,8 @@ export class NextTrainingComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // this.exerciseSubscription = this.trainingService.exercisesChanged.subscribe(ex => this.trainings = ex);
-    this.trainings$ = this.store.select(fromTraining.getAvailableTrainings);
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
+    this.trainings$ = this.store.select(fromTraining.getAvailableTrainings);
     this.onFetchTrainings();
     // this.isLoadingSubs = this.ui.loadingContentChanged.subscribe( loadingState => this.isLoading = loadingState);
   }

@@ -75,7 +75,7 @@ finishedExercisesChanged = new Subject<Exercise[]>();
 
   cancelExercise(progress: number) {
     this.store.select(fromRoot.getActiveTraining).pipe(take(1)).subscribe(ex => {
-      this.addDataToDatabase({...this.runningExercise,
+      this.addDataToDatabase({...ex,
         duration: ex.duration * (progress / 100),
         calories: ex.calories * (progress / 100),
         date: new Date(),
